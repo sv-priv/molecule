@@ -46,6 +46,7 @@ export default function User() {
     const networkChanged = (chainId) => {
       console.log({ chainId })
     }
+
     useEffect(() => {
       const chainId = parseInt(window.ethereum.chainId)
       localStorage.setItem("chainId", chainId)
@@ -58,8 +59,12 @@ export default function User() {
     }, [])
   }
 
-  async function mint() {
-    //send transaction
+  async function mint(e) {
+    e.preventDefault()
+    //mint
+    //encrypt the data
+    //get the encryption key from somewhere
+    console.log("mint")
   }
 
   return (
@@ -106,12 +111,7 @@ export default function User() {
                 />
 
                 <div>
-                  <button
-                    className="ml-button"
-                    onClick={async () => {
-                      //MINT
-                    }}
-                  >
+                  <button className="ml-button" onClick={(e) => mint(e)}>
                     Mint token
                   </button>
                 </div>

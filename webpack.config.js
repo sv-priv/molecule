@@ -35,6 +35,7 @@ module.exports = {
     new NodePolyfillPlugin(),
     new EnvironmentPlugin(webAppConfig),
   ],
+
   resolve: {
     fallback: {
       fs: false,
