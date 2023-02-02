@@ -9,7 +9,7 @@ const htmlPlugin = new HtmlWebPackPlugin({
   publicPath: "/",
 })
 module.exports = {
-  mode: "production",
+  mode: "development",
   module: {
     rules: [
       {
