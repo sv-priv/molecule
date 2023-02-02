@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import "./Home.css"
 import cryptoJS from "crypto-js"
-import * as IPFS from "ipfs-http-client"
+import { create } from "ipfs-http-client"
 
 import { ethers } from "ethers"
 
@@ -101,35 +101,40 @@ export default function User() {
 
     const auth =
       "Basic " + Buffer.from(projectId + ":" + projectSecret).toString("base64")
+    console.log(auth)
 
-    const ipfs = IPFS.create({
-      host: "goerli.infura.io/v3/525818ec5792443493d4f7b00910b417",
+    const ipfs = create({
+      host: "ipfs.infura.io",
       port: 5001,
       protocol: "https",
       headers: {
         authorization: auth,
       },
     })
-    console.log("ipfs", ipfs)
 
     const ipfsAddHashedObject = await ipfs.add(ciphertext.toString())
-    console.log("ipfsAdded", ipfsAddHashedObject)
+    console.log("ipfsAdded", ipfsAddHashedObject.path)
 
     //read from the contract what is the number of tokens, get the number of tokens + 1 and put it in the token name
     // contract.getNumberOfTokens()
 
     const tokenNumber = 0 //todo
+
     const tokenUri = {
       name: `token #${tokenNumber}`,
       description: `this token can cure ${cure}`,
-      contractData: `ipfs://Qm${ipfsAddHashedObject.cid}`,
+      contractData: `ipfs://Qm${ipfsAddHashedObject.path}`,
     }
 
-    const ipfsAddTokenURI = await ipfs.add(tokenUri)
+    const ipfsAddTokenURI = await ipfs.add(JSON.stringify(tokenUri))
+    console.log("token uri", ipfsAddTokenURI.path)
 
     // contract.mint(tokenAddress, tokenUri.cid)
-    // when is minted put the encryption key in localStorage alongside the tokenId
 
+    // when is minted put the encryption key in localStorage alongside the tokenId and the owner address
+
+    //one of the suggested things would be, build a backend and store them there not in local storage.
+    // map every user address to the tokenID and the key
     const bytes = cryptoJS.AES.decrypt(ciphertext.toString(), r)
     const plaintext = bytes.toString(cryptoJS.enc.Utf8)
     console.log("plaintext", plaintext)
