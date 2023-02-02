@@ -1,0 +1,57 @@
+.section {
+  margin-top: 40px;
+}
+.ml-button {
+  border: none;
+  padding: 10px 10px 10px 10px;
+  margin: 5px;
+}
+.ml-button:hover {
+  border: none;
+  padding: 10px 10px 10px 10px;
+  margin: 5px;
+  background-color: #00d4c8;
+  color: white;
+}
+.ml-button:after {
+  border: none;
+  padding: 10px 10px 10px 10px;
+  margin: 5px;
+  background-color: blue;
+}
+
+.home-container {
+  text-align: center;
+}
+
+.ercs-section button {
+  padding: 10px;
+  margin: 10px;
+  color: #00d4c8;
+  border-radius: 5px;
+
+  border: 1px solid gray;
+}
+
+.ercs-section button:hover {
+  padding: 10px;
+  border-color: rgba(0, 0, 0, 0.25) !important;
+  margin: 10px;
+  background-color: #00d4c8;
+  color: white;
+  border-radius: 5px;
+}
+
+.is-clicked {
+  padding: 10px;
+  border-color: rgba(0, 0, 0, 0.25) !important;
+  margin: 10px;
+  background-color: #00d4c8;
+  color: white !important;
+  border-radius: 5px;
+}
+
+.install-metamask {
+  margin-top: 10%;
+  font-size: 20px;
+}
