@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack serve --open --config webpack.config.js",
     "build": "webpack --config webpack.config.js"
+
   },
   "keywords": [],
   "author": "Stefan Velkoski",
@@ -15,7 +16,6 @@
     "bootstrap": "^5.2.2",
     "nightfall-sdk": "1.0.0",
     "node-polyfill-webpack-plugin": "^2.0.1",
-    "path": "^0.12.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.2"
