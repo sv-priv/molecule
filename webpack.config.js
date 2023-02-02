@@ -1,15 +1,15 @@
-const HtmlWebPackPlugin = require("html-webpack-plugin");
-const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
-const { EnvironmentPlugin } = require("webpack");
-const { webAppConfig } = require("./webAppConfig");
+const HtmlWebPackPlugin = require("html-webpack-plugin")
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
+const { EnvironmentPlugin } = require("webpack")
+const { webAppConfig } = require("./webAppConfig")
 
 const htmlPlugin = new HtmlWebPackPlugin({
   template: "./src/index.html",
   filename: "./index.html",
   publicPath: "/",
-});
+})
 module.exports = {
-  mode: "development",
+  mode: "production",
   module: {
     rules: [
       {
@@ -40,4 +40,4 @@ module.exports = {
       fs: false,
     },
   },
-};
+}
