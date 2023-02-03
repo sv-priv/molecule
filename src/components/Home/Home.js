@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import "./Home.css"
 import cryptoJS from "crypto-js"
 import { create } from "ipfs-http-client"
+import { moleculeABI } from "../../ABIs/Molecule"
 
 import { ethers } from "ethers"
 
@@ -16,233 +17,9 @@ export default function User() {
   const [institution, setInstitution] = useState(null)
   const [brightlistAddress, setBrightlistAddress] = useState(null)
   const [revokeAddress, setRevokeAddress] = useState(null)
-
-  const [encryptionKey, setEncryptionKey] = useState(null)
+  const [showKey, setShowKey] = useState(false)
 
   const contractAddress = "0xe8c894d0b2e70d5ad03e66e7e5b31d24a96ae83a"
-  const contractABI = [
-    {
-      inputs: [{ internalType: "address", name: "_owner", type: "address" }],
-      stateMutability: "nonpayable",
-      type: "constructor",
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: "address",
-          name: "owner",
-          type: "address",
-        },
-        {
-          indexed: true,
-          internalType: "address",
-          name: "spender",
-          type: "address",
-        },
-        { indexed: true, internalType: "uint256", name: "id", type: "uint256" },
-      ],
-      name: "Approval",
-      type: "event",
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: "address",
-          name: "owner",
-          type: "address",
-        },
-        {
-          indexed: true,
-          internalType: "address",
-          name: "operator",
-          type: "address",
-        },
-        {
-          indexed: false,
-          internalType: "bool",
-          name: "approved",
-          type: "bool",
-        },
-      ],
-      name: "ApprovalForAll",
-      type: "event",
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: "address",
-          name: "from",
-          type: "address",
-        },
-        { indexed: true, internalType: "address", name: "to", type: "address" },
-        { indexed: true, internalType: "uint256", name: "id", type: "uint256" },
-      ],
-      name: "Transfer",
-      type: "event",
-    },
-    {
-      inputs: [
-        {
-          internalType: "address",
-          name: "_addressToBrightlist",
-          type: "address",
-        },
-      ],
-      name: "addToBrightlist",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      inputs: [
-        { internalType: "address", name: "spender", type: "address" },
-        { internalType: "uint256", name: "id", type: "uint256" },
-      ],
-      name: "approve",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      inputs: [{ internalType: "address", name: "owner", type: "address" }],
-      name: "balanceOf",
-      outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [],
-      name: "counter",
-      outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-      name: "getApproved",
-      outputs: [{ internalType: "address", name: "", type: "address" }],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [
-        { internalType: "address", name: "", type: "address" },
-        { internalType: "address", name: "", type: "address" },
-      ],
-      name: "isApprovedForAll",
-      outputs: [{ internalType: "bool", name: "", type: "bool" }],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [{ internalType: "string", name: "_tokenURI", type: "string" }],
-      name: "mintToken",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      inputs: [],
-      name: "name",
-      outputs: [{ internalType: "string", name: "", type: "string" }],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [],
-      name: "owner",
-      outputs: [{ internalType: "address", name: "", type: "address" }],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [{ internalType: "uint256", name: "id", type: "uint256" }],
-      name: "ownerOf",
-      outputs: [{ internalType: "address", name: "owner", type: "address" }],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [
-        { internalType: "address", name: "_addressToRevoke", type: "address" },
-      ],
-      name: "revokeFromBrightlist",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      inputs: [
-        { internalType: "address", name: "from", type: "address" },
-        { internalType: "address", name: "to", type: "address" },
-        { internalType: "uint256", name: "id", type: "uint256" },
-      ],
-      name: "safeTransferFrom",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      inputs: [
-        { internalType: "address", name: "from", type: "address" },
-        { internalType: "address", name: "to", type: "address" },
-        { internalType: "uint256", name: "id", type: "uint256" },
-        { internalType: "bytes", name: "data", type: "bytes" },
-      ],
-      name: "safeTransferFrom",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      inputs: [
-        { internalType: "address", name: "operator", type: "address" },
-        { internalType: "bool", name: "approved", type: "bool" },
-      ],
-      name: "setApprovalForAll",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      inputs: [{ internalType: "bytes4", name: "interfaceId", type: "bytes4" }],
-      name: "supportsInterface",
-      outputs: [{ internalType: "bool", name: "", type: "bool" }],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [],
-      name: "symbol",
-      outputs: [{ internalType: "string", name: "", type: "string" }],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [{ internalType: "uint256", name: "id", type: "uint256" }],
-      name: "tokenURI",
-      outputs: [{ internalType: "string", name: "", type: "string" }],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [
-        { internalType: "address", name: "from", type: "address" },
-        { internalType: "address", name: "to", type: "address" },
-        { internalType: "uint256", name: "id", type: "uint256" },
-      ],
-      name: "transferFrom",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-  ]
 
   const accounts = window.ethereum.request({ method: "eth_requestAccounts" })
   const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -252,16 +29,15 @@ export default function User() {
   const signer = provider.getSigner(walletAddress)
   const signerAddress = signer.getAddress()
 
-  window.ethereum.on("accountsChanged", function (accounts) {
-    setUserAddress(accounts[0])
-    localStorage.setItem("userAddress", accounts[0])
-
-    location.reload()
-  })
+  useEffect(async () => {
+    const chainId = parseInt(window.ethereum.chainId)
+    localStorage.setItem("chainId", chainId)
+    setUserAddress(localStorage.getItem("userAddress"))
+  }, [])
 
   const moleculeContract = new ethers.Contract(
     contractAddress,
-    contractABI,
+    moleculeABI,
     signer
   )
 
@@ -273,35 +49,38 @@ export default function User() {
   async function addToBrightlist(e, address) {
     e.preventDefault()
     const whitelisted = await moleculeContract.addToBrightlist(address)
-    console.log(whitelisted)
   }
+
   async function revokeFromBrightlist(e, address) {
     e.preventDefault()
     const removed = await moleculeContract.revokeFromBrightlist(address)
-    console.log(removed)
   }
-
-  useEffect(() => {
-    const chainId = parseInt(window.ethereum.chainId)
-    localStorage.setItem("chainId", chainId)
-    setUserAddress(localStorage.getItem("userAddress"))
-  }, [])
 
   function encrypt(contractData) {
     //get a random encrytion key
     let r = (Math.random() + 1).toString(36).substring(7)
     console.log("random", r)
 
+    localStorage.setItem("encryptionKey", r)
+
     const ciphertext = cryptoJS.AES.encrypt(contractData, r)
     console.log("cipertext", ciphertext.toString())
     return ciphertext.toString()
   }
 
-  async function decrypt() {}
+  // TO DO
+  async function decrypt() {
+    //one of the suggested things would be, build a backend and store them there not in local storage.
+    // map every user address to the tokenID and the key
+    // const bytes = cryptoJS.AES.decrypt(ciphertext.toString(), r)
+    // const plaintext = bytes.toString(cryptoJS.enc.Utf8)
+    // console.log("plaintext", plaintext)
+    // const JSONEND = JSON.parse(plaintext)
+    // console.log("initial", JSONEND)
+  }
 
+  //TO DO REFACTOR THE CODE FROM MINT FUNCTION
   async function uploadToIpfs() {}
-
-  async function showKey() {}
 
   async function mint(e, cure, researcher, university, patentId, institution) {
     e.preventDefault()
@@ -319,9 +98,8 @@ export default function User() {
     const stringMintObject = JSON.stringify(mintObject)
 
     const encryptedContractData = encrypt(stringMintObject)
-    console.log("encrypted data", encryptedContractData)
 
-    // put the ciphertext string to IPFS
+    console.log("encrypted data", encryptedContractData)
 
     // eventually put put sensitive data in an env file
     const projectId = "2LCM7opw4FWtnPy0xOy0CLo3U1y"
@@ -340,13 +118,12 @@ export default function User() {
       },
     })
 
-    const ipfsAddHashedObject = await ipfs.add(ciphertext.toString())
+    const ipfsAddHashedObject = await ipfs.add(encryptedContractData)
+
     console.log("ipfsAdded", ipfsAddHashedObject.path)
 
-    //read from the contract what is the number of tokens, get the number of tokens + 1 and put it in the token name
-    // contract.getNumberOfTokens()
-
-    const tokenNumber = 0 //todo
+    let tokenNumber = await moleculeContract.counter()
+    tokenNumber++
 
     const tokenUri = {
       name: `token #${tokenNumber}`,
@@ -356,31 +133,9 @@ export default function User() {
 
     const ipfsAddTokenURI = await ipfs.add(JSON.stringify(tokenUri))
 
-    console.log("token uri", ipfsAddTokenURI.path)
+    await moleculeContract.addToBrightlist(signerAddress)
 
-    //  await moleculeContract.addToBrightlist(
-    // //   signer.getAddress()
-    // // )
-    addToBrightlist(signerAddress)
-
-    revoke
-    await moleculeContract.mintToken(ipfsAddTokenURI.path)
-
-    // contract.mint(tokenAddress, tokenUri.cid)
-
-    // when is minted put the encryption key in localStorage alongside the tokenId and the owner address
-
-    //one of the suggested things would be, build a backend and store them there not in local storage.
-    // map every user address to the tokenID and the key
-
-    const bytes = cryptoJS.AES.decrypt(ciphertext.toString(), r)
-    const plaintext = bytes.toString(cryptoJS.enc.Utf8)
-    console.log("plaintext", plaintext)
-
-    const JSONEND = JSON.parse(plaintext)
-    console.log("initial", JSONEND)
-
-    //get the encryption key from somewhere
+    const receipt = await moleculeContract.mintToken(ipfsAddTokenURI.path)
   }
 
   return (
@@ -486,9 +241,17 @@ export default function User() {
                 </div>
               </form>
               <div>
-                <button className="ml-button" onClick={showKey()}>
-                  Show Encryption key
+                <button
+                  className="ml-button"
+                  onClick={() => {
+                    setShowKey(!showKey)
+                  }}
+                >
+                  {showKey ? "Hide Encryption Key" : "Show Encryption Key"}
                 </button>
+                <span className="encryptionKey">
+                  {showKey ? localStorage.getItem("encryptionKey") : ""}
+                </span>
               </div>
             </div>
           </div>

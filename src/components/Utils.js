@@ -1,6 +1,6 @@
 import { moleculeContractAddress, networks } from "./Constants"
 
-function connectWallet(networkName) {
+async function connectWallet(networkName) {
   console.log("connecting to wallet.......")
   window.ethereum.request({
     method: "wallet_addEthereumChain",
@@ -10,5 +10,10 @@ function connectWallet(networkName) {
       },
     ],
   })
+  const accounts = await window.ethereum.request({
+    method: "eth_requestAccounts",
+  })
+  const walletAddress = accounts[0]
+  localStorage.setItem("userAddress", walletAddress)
 }
 export { connectWallet }
