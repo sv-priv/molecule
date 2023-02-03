@@ -6,7 +6,7 @@ import { moleculeABI } from "../../ABIs/Molecule"
 
 import { ethers } from "ethers"
 
-export default function User() {
+export default function Home() {
   const [userAddress, setUserAddress] = useState()
   useState(null)
 
