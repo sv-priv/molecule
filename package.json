@@ -15,7 +15,6 @@
     "bootstrap": "^5.2.2",
     "crypto-js": "^4.1.1",
     "ipfs-http-client": "^60.0.0",
-    "nightfall-sdk": "1.0.0",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
